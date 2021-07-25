@@ -19,6 +19,8 @@ namespace JOIEnergy.DataAccess.DataManagement
             if (seed)
             {
                 SeedPricePlans();
+
+                SeedMeterReading();
             }
         }
 
