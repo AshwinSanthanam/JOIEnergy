@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JOIEnergy.Base\JOIEnergy.Base.csproj" />
+    <ProjectReference Include="..\JOIEnergy.DataAccess\JOIEnergy.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
