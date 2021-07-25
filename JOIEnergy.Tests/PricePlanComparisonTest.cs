@@ -22,7 +22,7 @@ namespace JOIEnergy.Tests
 
         public PricePlanComparisonTest()
         {
-            _repository = new InMemoryRepository();
+            _repository = new InMemoryRepository(false);
             meterReadingService = new MeterReadingService(_repository);
             _repository.InsertPricePlan(new TransientPricePlan 
             {

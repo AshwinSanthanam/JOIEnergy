@@ -27,24 +27,6 @@ namespace JOIEnergy
             var readings =
                 GenerateMeterElectricityReadings();
 
-            var pricePlans = new List<PricePlan> {
-                new PricePlan{
-                    EnergySupplier = Supplier.DrEvilsDarkEnergy,
-                    UnitRate = 10m,
-                    PeakTimeMultiplier = new List<PeakTimeMultiplier>()
-                },
-                new PricePlan{
-                    EnergySupplier = Supplier.TheGreenEco,
-                    UnitRate = 2m,
-                    PeakTimeMultiplier = new List<PeakTimeMultiplier>()
-                },
-                new PricePlan{
-                    EnergySupplier = Supplier.PowerForEveryone,
-                    UnitRate = 1m,
-                    PeakTimeMultiplier = new List<PeakTimeMultiplier>()
-                }
-            };
-
             services.AddMvc();
 
             new List<IRegistry> 
@@ -54,7 +36,6 @@ namespace JOIEnergy
             }.ForEach(x => x.Register(services, Configuration));
 
             services.AddSingleton((IServiceProvider arg) => readings);
-            services.AddSingleton((IServiceProvider arg) => pricePlans);
             services.AddSingleton((IServiceProvider arg) => SmartMeterToPricePlanAccounts);
         }
 

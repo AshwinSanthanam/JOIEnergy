@@ -1,5 +1,6 @@
 ﻿using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.Entities;
+using JOIEnergy.Base.Enums;
 using JOIEnergy.Base.TransientEntities.cs;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,15 @@ namespace JOIEnergy.DataAccess.DataManagement
         private readonly Dictionary<string, PricePlan> _pricePlans;
         private Dictionary<string, MeterReading> _meterAssociatedReadings;
 
-        public InMemoryRepository()
+        public InMemoryRepository(bool seed = true)
         {
             _pricePlans = new Dictionary<string, PricePlan>();
             _meterAssociatedReadings = new Dictionary<string, MeterReading>();
+
+            if(seed)
+            {
+                SeedPricePlans();
+            }
         }
 
         public IEnumerable<PricePlan> PricePlans => _pricePlans.Values;
@@ -58,6 +64,32 @@ namespace JOIEnergy.DataAccess.DataManagement
             MeterReading meterReadingToUpdate = _meterAssociatedReadings[meterReadingId];
             meterReadingToUpdate.ElectricityReadings = transientMeterReading.ElectricityReadings;
             return meterReadingToUpdate;
+        }
+
+        private void SeedPricePlans()
+        {
+            var pricePlans = new List<PricePlan> {
+                new PricePlan {
+                    Id = Guid.NewGuid().ToString(),
+                    EnergySupplier = Supplier.DrEvilsDarkEnergy,
+                    UnitRate = 10m,
+                    PeakTimeMultiplier = new List<PeakTimeMultiplier>()
+                },
+                new PricePlan {
+                    Id = Guid.NewGuid().ToString(),
+                    EnergySupplier = Supplier.TheGreenEco,
+                    UnitRate = 2m,
+                    PeakTimeMultiplier = new List<PeakTimeMultiplier>()
+                },
+                new PricePlan {
+                    Id = Guid.NewGuid().ToString(),
+                    EnergySupplier = Supplier.PowerForEveryone,
+                    UnitRate = 1m,
+                    PeakTimeMultiplier = new List<PeakTimeMultiplier>()
+                }
+            };
+
+            pricePlans.ForEach(x => _pricePlans.Add(x.Id, x));
         }
     }
 }
