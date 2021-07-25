@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.Entities;
 using JOIEnergy.Base.Enums;
-using JOIEnergy.DataAccess.DataManagement;
 using JOIEnergy.Generator;
-using JOIEnergy.Services;
+using JOIEnergy.Registry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -48,10 +46,13 @@ namespace JOIEnergy
             };
 
             services.AddMvc();
-            services.AddSingleton<IRepository, InMemoryRepository>();
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<IMeterReadingService, MeterReadingService>();
-            services.AddSingleton<IPricePlanService, PricePlanService>();
+
+            new List<IRegistry> 
+            {
+                new ServiceRegistry(),
+                new DatabaseRegistry()
+            }.ForEach(x => x.Register(services, Configuration));
+
             services.AddSingleton((IServiceProvider arg) => readings);
             services.AddSingleton((IServiceProvider arg) => pricePlans);
             services.AddSingleton((IServiceProvider arg) => SmartMeterToPricePlanAccounts);
