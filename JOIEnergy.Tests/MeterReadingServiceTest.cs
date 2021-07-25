@@ -4,6 +4,7 @@ using JOIEnergy.Services;
 using Xunit;
 using JOIEnergy.Base.Entities;
 using JOIEnergy.DataAccess.DataManagement;
+using System.Linq;
 
 namespace JOIEnergy.Tests
 {
@@ -37,7 +38,7 @@ namespace JOIEnergy.Tests
 
             var electricityReadings = meterReadingService.GetReadings(SMART_METER_ID);
 
-            Assert.Equal(3, electricityReadings.Count);
+            Assert.Equal(3, electricityReadings.Count());
         }
 
     }

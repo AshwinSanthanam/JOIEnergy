@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.Entities;
 
@@ -13,12 +14,12 @@ namespace JOIEnergy.Services
             _repository = repository;
         }
 
-        public List<ElectricityReading> GetReadings(string smartMeterId) {
+        public IEnumerable<ElectricityReading> GetReadings(string smartMeterId) {
             MeterReading meterReading = _repository.GetMeterReading(smartMeterId);
-            return meterReading?.ElectricityReadings ?? new List<ElectricityReading>();
+            return meterReading?.ElectricityReadings ?? Enumerable.Empty<ElectricityReading>();
         }
 
-        public void StoreReadings(string smartMeterId, List<ElectricityReading> electricityReadings) {
+        public void StoreReadings(string smartMeterId, IEnumerable<ElectricityReading> electricityReadings) {
             MeterReading meterReading = _repository.GetMeterReading(smartMeterId);
             if (meterReading == null) 
             {
@@ -30,10 +31,9 @@ namespace JOIEnergy.Services
             }
             else
             {
-                meterReading.ElectricityReadings.AddRange(electricityReadings);
                 _repository.UpdateMeterReading(new MeterReading
                 {
-                    ElectricityReadings = meterReading.ElectricityReadings,
+                    ElectricityReadings = meterReading.ElectricityReadings.Concat(electricityReadings),
                     Id = smartMeterId
                 });
             }

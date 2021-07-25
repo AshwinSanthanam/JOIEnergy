@@ -18,21 +18,21 @@ namespace JOIEnergy.Services
             _meterReadingService = meterReadingService;
         }
 
-        private decimal calculateAverageReading(List<ElectricityReading> electricityReadings)
+        private decimal calculateAverageReading(IEnumerable<ElectricityReading> electricityReadings)
         {
             var newSummedReadings = electricityReadings.Select(readings => readings.Reading).Aggregate((reading, accumulator) => reading + accumulator);
 
             return newSummedReadings / electricityReadings.Count();
         }
 
-        private decimal calculateTimeElapsed(List<ElectricityReading> electricityReadings)
+        private decimal calculateTimeElapsed(IEnumerable<ElectricityReading> electricityReadings)
         {
             var first = electricityReadings.Min(reading => reading.Time);
             var last = electricityReadings.Max(reading => reading.Time);
 
             return (decimal)(last - first).TotalHours;
         }
-        private decimal calculateCost(List<ElectricityReading> electricityReadings, PricePlan pricePlan)
+        private decimal calculateCost(IEnumerable<ElectricityReading> electricityReadings, PricePlan pricePlan)
         {
             var average = calculateAverageReading(electricityReadings);
             var timeElapsed = calculateTimeElapsed(electricityReadings);
@@ -42,7 +42,7 @@ namespace JOIEnergy.Services
 
         public Dictionary<String, decimal> GetConsumptionCostOfElectricityReadingsForEachPricePlan(String smartMeterId)
         {
-            List<ElectricityReading> electricityReadings = _meterReadingService.GetReadings(smartMeterId);
+            IEnumerable<ElectricityReading> electricityReadings = _meterReadingService.GetReadings(smartMeterId);
 
             if (!electricityReadings.Any())
             {

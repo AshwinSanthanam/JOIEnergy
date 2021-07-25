@@ -32,7 +32,7 @@ namespace JOIEnergy.Controllers
         private bool IsMeterReadingsValid(MeterReading meterReadings)
         {
             String smartMeterId = meterReadings.Id;
-            List<ElectricityReading> electricityReadings = meterReadings.ElectricityReadings;
+            IEnumerable<ElectricityReading> electricityReadings = meterReadings.ElectricityReadings;
             return smartMeterId != null && smartMeterId.Any()
                     && electricityReadings != null && electricityReadings.Any();
         }

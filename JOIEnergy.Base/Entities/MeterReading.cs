@@ -5,6 +5,6 @@ namespace JOIEnergy.Base.Entities
     public class MeterReading
     {
         public string Id { get; set; }
-        public List<ElectricityReading> ElectricityReadings { get; set; }
+        public IEnumerable<ElectricityReading> ElectricityReadings { get; set; }
     }
 }
