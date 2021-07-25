@@ -2,6 +2,7 @@
 using JOIEnergy.Base.Entities;
 using JOIEnergy.Base.Enums;
 using JOIEnergy.Base.TransientEntities.cs;
+using JOIEnergy.Base.Validators;
 using System;
 using System.Collections.Generic;
 
@@ -12,15 +13,18 @@ namespace JOIEnergy.DataAccess.DataManagement
         private readonly Dictionary<string, PricePlan> _pricePlans;
         private Dictionary<string, MeterReading> _meterAssociatedReadings;
 
-        public InMemoryRepository(bool seed = true)
+        private readonly AbstractMeterReadingValidator _meterReadingValidator;
+
+        public InMemoryRepository(AbstractMeterReadingValidator meterReadingValidator, bool seed = true)
         {
             _pricePlans = new Dictionary<string, PricePlan>();
             _meterAssociatedReadings = new Dictionary<string, MeterReading>();
 
-            if(seed)
+            if (seed)
             {
                 SeedPricePlans();
             }
+            _meterReadingValidator = meterReadingValidator;
         }
 
         public IEnumerable<PricePlan> PricePlans => _pricePlans.Values;
@@ -37,6 +41,7 @@ namespace JOIEnergy.DataAccess.DataManagement
 
         public MeterReading InsertMeterReading(TransientMeterReading transientMeterReading)
         {
+            _meterReadingValidator.Validate(transientMeterReading, string.Empty);
             MeterReading meterReading = new MeterReading
             {
                 ElectricityReadings = transientMeterReading.ElectricityReadings,

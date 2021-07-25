@@ -10,6 +10,7 @@ using JOIEnergy.Base.Entities;
 using JOIEnergy.DataAccess.DataManagement;
 using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.TransientEntities.cs;
+using JOIEnergy.DataAccess;
 
 namespace JOIEnergy.Tests
 {
@@ -22,7 +23,7 @@ namespace JOIEnergy.Tests
 
         public PricePlanComparisonTest()
         {
-            _repository = new InMemoryRepository(false);
+            _repository = new InMemoryRepository(new MeterReadingValidator(), false);
             meterReadingService = new MeterReadingService(_repository);
             _repository.InsertPricePlan(new TransientPricePlan 
             {

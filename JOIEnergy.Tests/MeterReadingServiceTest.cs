@@ -5,6 +5,7 @@ using Xunit;
 using JOIEnergy.Base.Entities;
 using JOIEnergy.DataAccess.DataManagement;
 using System.Linq;
+using JOIEnergy.DataAccess;
 
 namespace JOIEnergy.Tests
 {
@@ -15,7 +16,7 @@ namespace JOIEnergy.Tests
 
         public MeterReadingServiceTest()
         {
-            _meterReadingService = new MeterReadingService(new InMemoryRepository());
+            _meterReadingService = new MeterReadingService(new InMemoryRepository(new MeterReadingValidator(), false));
 
             MeterReading meterReading = _meterReadingService.StoreReadings(null, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },
