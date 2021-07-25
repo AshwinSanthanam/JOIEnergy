@@ -8,6 +8,8 @@ using Newtonsoft.Json.Linq;
 using JOIEnergy.Base.Enums;
 using JOIEnergy.Base.Entities;
 using JOIEnergy.DataAccess.DataManagement;
+using JOIEnergy.Base.DataManagement;
+using JOIEnergy.Base.TransientEntities.cs;
 
 namespace JOIEnergy.Tests
 {
@@ -16,17 +18,32 @@ namespace JOIEnergy.Tests
         private MeterReadingService meterReadingService;
         private PricePlanComparatorController controller;
         private Dictionary<string, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
+        private readonly IRepository _repository;
 
         public PricePlanComparisonTest()
         {
-            meterReadingService = new MeterReadingService(new InMemoryRepository());
-            var pricePlans = new List<PricePlan>() { 
-                new PricePlan() { EnergySupplier = Supplier.DrEvilsDarkEnergy, UnitRate = 10, PeakTimeMultiplier = NoMultipliers() }, 
-                new PricePlan() { EnergySupplier = Supplier.TheGreenEco, UnitRate = 2, PeakTimeMultiplier = NoMultipliers() },
-                new PricePlan() { EnergySupplier = Supplier.PowerForEveryone, UnitRate = 1, PeakTimeMultiplier = NoMultipliers() } 
-            };
-            var pricePlanService = new PricePlanService(pricePlans, meterReadingService);
-            var accountService = new AccountService(smartMeterToPricePlanAccounts);
+            _repository = new InMemoryRepository();
+            meterReadingService = new MeterReadingService(_repository);
+            _repository.InsertPricePlan(new TransientPricePlan 
+            {
+                EnergySupplier = Supplier.DrEvilsDarkEnergy,
+                UnitRate = 10,
+                PeakTimeMultiplier = NoMultipliers()
+            });
+            _repository.InsertPricePlan(new TransientPricePlan 
+            {
+                EnergySupplier = Supplier.TheGreenEco,
+                UnitRate = 2,
+                PeakTimeMultiplier = NoMultipliers()
+            });
+            _repository.InsertPricePlan(new TransientPricePlan 
+            {
+                EnergySupplier = Supplier.PowerForEveryone,
+                UnitRate = 1,
+                PeakTimeMultiplier = NoMultipliers()
+            });
+            PricePlanService pricePlanService = new PricePlanService(_repository, meterReadingService);
+            AccountService accountService = new AccountService(smartMeterToPricePlanAccounts);
             controller = new PricePlanComparatorController(pricePlanService, accountService);
         }
 

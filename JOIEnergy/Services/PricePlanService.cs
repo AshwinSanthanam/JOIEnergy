@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.Entities;
 
 namespace JOIEnergy.Services
 {
     public class PricePlanService : IPricePlanService
     {
-        public interface Debug { void Log(string s); };
-
-        private readonly List<PricePlan> _pricePlans;
         private IMeterReadingService _meterReadingService;
+        private readonly IRepository _repository;
 
-        public PricePlanService(List<PricePlan> pricePlan, IMeterReadingService meterReadingService)
+        public PricePlanService(IRepository repository, IMeterReadingService meterReadingService)
         {
-            _pricePlans = pricePlan;
+            _repository = repository;
             _meterReadingService = meterReadingService;
         }
 
@@ -48,7 +47,7 @@ namespace JOIEnergy.Services
             {
                 return new Dictionary<string, decimal>();
             }
-            return _pricePlans.ToDictionary(plan => plan.EnergySupplier.ToString(), plan => calculateCost(electricityReadings, plan));
+            return _repository.PricePlans.ToDictionary(plan => plan.EnergySupplier.ToString(), plan => calculateCost(electricityReadings, plan));
         }
     }
 }
