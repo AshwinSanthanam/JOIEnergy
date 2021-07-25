@@ -24,5 +24,15 @@ namespace JOIEnergy.DataAccess.DataManagement
             _dbContext.MeterReadings.TryGetValue(meterId, out MeterReading meterReading);
             return meterReading;
         }
+
+        public MeterReadingPricePlanAccount GetMeterReadingPricePlanAccount(string meterReadingId)
+        {
+            if (string.IsNullOrEmpty(meterReadingId))
+            {
+                return null;
+            }
+            _dbContext.MeterReadingPricePlanAccounts.TryGetValue(meterReadingId, out MeterReadingPricePlanAccount meterReadingPricePlanAccount);
+            return meterReadingPricePlanAccount;
+        }
     }
 }

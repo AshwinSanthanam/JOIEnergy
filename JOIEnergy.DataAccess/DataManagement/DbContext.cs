@@ -15,6 +15,7 @@ namespace JOIEnergy.DataAccess.DataManagement
         {
             MeterReadings = new Dictionary<string, MeterReading>();
             PricePlans = new Dictionary<string, PricePlan>();
+            MeterReadingPricePlanAccounts = new Dictionary<string, MeterReadingPricePlanAccount>();
 
             if (seed)
             {

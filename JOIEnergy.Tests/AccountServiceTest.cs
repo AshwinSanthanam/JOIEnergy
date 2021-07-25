@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using JOIEnergy.Base.Entities;
 using JOIEnergy.Base.Enums;
+using JOIEnergy.DataAccess.DataManagement;
 using JOIEnergy.Services;
 using Xunit;
 
@@ -15,10 +17,14 @@ namespace JOIEnergy.Tests
 
         public AccountServiceTest()
         {
-            Dictionary<String, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
-            smartMeterToPricePlanAccounts.Add(SMART_METER_ID, PRICE_PLAN_ID);
-
-            accountService = new AccountService(smartMeterToPricePlanAccounts);
+            var dbContext = new DbContext(false);
+            dbContext.MeterReadingPricePlanAccounts.Add(SMART_METER_ID, new MeterReadingPricePlanAccount 
+            {
+                MeterReadingId = SMART_METER_ID,
+                Supplier = PRICE_PLAN_ID
+            });
+            var repository = new InMemoryRepository(dbContext);
+            accountService = new AccountService(repository);
         }
 
         [Fact]

@@ -48,7 +48,7 @@ namespace JOIEnergy.Tests
                 PeakTimeMultiplier = NoMultipliers()
             });
             PricePlanService pricePlanService = new PricePlanService(_repository, meterReadingService);
-            AccountService accountService = new AccountService(smartMeterToPricePlanAccounts);
+            AccountService accountService = new AccountService(_repository);
             controller = new PricePlanComparatorController(pricePlanService, accountService);
         }
 
