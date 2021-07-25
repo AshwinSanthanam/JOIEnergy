@@ -2,7 +2,6 @@
 using JOIEnergy.Base.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace JOIEnergy.DataAccess.DataManagement
 {
@@ -10,6 +9,7 @@ namespace JOIEnergy.DataAccess.DataManagement
     {
         public Dictionary<string, MeterReading> MeterReadings { get; }
         public Dictionary<string, PricePlan> PricePlans { get; }
+        public Dictionary<string, MeterReadingPricePlanAccount> MeterReadingPricePlanAccounts { get; }
 
         public DbContext(bool seed = true)
         {
@@ -20,7 +20,7 @@ namespace JOIEnergy.DataAccess.DataManagement
             {
                 SeedPricePlans();
 
-                SeedMeterReading();
+                SeedMeterReadingAndMeterToPricePlan();
             }
         }
 
@@ -50,17 +50,22 @@ namespace JOIEnergy.DataAccess.DataManagement
             pricePlans.ForEach(x => PricePlans.Add(x.Id, x));
         }
 
-        private void SeedMeterReading()
+        private void SeedMeterReadingAndMeterToPricePlan()
         {
             Dictionary<string, Supplier> smartMeterToPricePlanAccounts = GetSmartMeterToPricePlanAccounts();
-            var smartMeterIds = smartMeterToPricePlanAccounts.Select(mtpp => mtpp.Key);
 
-            foreach (var smartMeterId in smartMeterIds)
+            foreach (var smartMeterToPricePlan in smartMeterToPricePlanAccounts)
             {
-                MeterReadings.Add(smartMeterId, new MeterReading 
+                MeterReadings.Add(smartMeterToPricePlan.Key, new MeterReading 
                 {
-                    Id = smartMeterId,
+                    Id = smartMeterToPricePlan.Key,
                     ElectricityReadings = GenerateElectricityReading(20)
+                });
+
+                MeterReadingPricePlanAccounts.Add(smartMeterToPricePlan.Key, new MeterReadingPricePlanAccount 
+                {
+                    MeterReadingId = smartMeterToPricePlan.Key,
+                    Supplier = smartMeterToPricePlan.Value
                 });
             }
         }
