@@ -16,14 +16,6 @@ namespace JOIEnergy.DataAccess.DataManagement
             _meterAssociatedReadings = new Dictionary<string, MeterReadings>();
         }
 
-        public MeterReadings InsertMeterReading(MeterReadings meterReadings)
-        {
-            _meterAssociatedReadings.Add(meterReadings.SmartMeterId, meterReadings);
-            return meterReadings;
-        }
-
-        public IEnumerable<PricePlan> PricePlans => throw new NotImplementedException();
-
         public MeterReadings GetMeterReading(string meterId)
         {
             _meterAssociatedReadings.TryGetValue(meterId, out MeterReadings meterReadings);
