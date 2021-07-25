@@ -1,6 +1,5 @@
 ﻿using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.Entities;
-using System;
 using System.Collections.Generic;
 
 namespace JOIEnergy.DataAccess.DataManagement
@@ -18,8 +17,21 @@ namespace JOIEnergy.DataAccess.DataManagement
 
         public MeterReadings GetMeterReading(string meterId)
         {
-            _meterAssociatedReadings.TryGetValue(meterId, out MeterReadings meterReadings);
-            return meterReadings;
+            _meterAssociatedReadings.TryGetValue(meterId, out MeterReadings meterReading);
+            return meterReading;
+        }
+
+        public MeterReadings InsertMeterReading(MeterReadings meterReading)
+        {
+            _meterAssociatedReadings.Add(meterReading.SmartMeterId, meterReading);
+            return meterReading;
+        }
+
+        public MeterReadings UpdateMeterReading(MeterReadings meterReading)
+        {
+            MeterReadings meterReadingToUpdate = _meterAssociatedReadings[meterReading.SmartMeterId];
+            meterReadingToUpdate.ElectricityReadings = meterReading.ElectricityReadings;
+            return meterReadingToUpdate;
         }
     }
 }

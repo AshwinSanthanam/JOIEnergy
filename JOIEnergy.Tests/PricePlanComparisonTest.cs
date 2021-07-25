@@ -7,6 +7,7 @@ using Xunit;
 using Newtonsoft.Json.Linq;
 using JOIEnergy.Base.Enums;
 using JOIEnergy.Base.Entities;
+using JOIEnergy.DataAccess.DataManagement;
 
 namespace JOIEnergy.Tests
 {
@@ -19,8 +20,7 @@ namespace JOIEnergy.Tests
 
         public PricePlanComparisonTest()
         {
-            var readings = new Dictionary<string, List<ElectricityReading>>();
-            meterReadingService = new MeterReadingService(readings);
+            meterReadingService = new MeterReadingService(new InMemoryRepository());
             var pricePlans = new List<PricePlan>() { 
                 new PricePlan() { EnergySupplier = Supplier.DrEvilsDarkEnergy, UnitRate = 10, PeakTimeMultiplier = NoMultipliers() }, 
                 new PricePlan() { EnergySupplier = Supplier.TheGreenEco, UnitRate = 2, PeakTimeMultiplier = NoMultipliers() },

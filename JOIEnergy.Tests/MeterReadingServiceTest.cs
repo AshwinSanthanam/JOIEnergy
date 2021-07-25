@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JOIEnergy.Services;
 using Xunit;
 using JOIEnergy.Base.Entities;
+using JOIEnergy.DataAccess.DataManagement;
 
 namespace JOIEnergy.Tests
 {
@@ -14,7 +15,7 @@ namespace JOIEnergy.Tests
 
         public MeterReadingServiceTest()
         {
-            meterReadingService = new MeterReadingService(new Dictionary<string, List<ElectricityReading>>());
+            meterReadingService = new MeterReadingService(new InMemoryRepository());
 
             meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },
