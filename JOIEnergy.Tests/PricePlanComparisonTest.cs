@@ -16,7 +16,6 @@ namespace JOIEnergy.Tests
         private MeterReadingService meterReadingService;
         private PricePlanComparatorController controller;
         private Dictionary<string, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
-        private static String SMART_METER_ID = "smart-meter-id";
 
         public PricePlanComparisonTest()
         {
@@ -36,9 +35,9 @@ namespace JOIEnergy.Tests
         {
             var electricityReading = new ElectricityReading() { Time = DateTime.Now.AddHours(-1), Reading = 15.0m };
             var otherReading = new ElectricityReading() { Time = DateTime.Now, Reading = 5.0m };
-            meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() { electricityReading, otherReading });
+            var meterReading = meterReadingService.StoreReadings(null, new List<ElectricityReading>() { electricityReading, otherReading });
 
-            var result = controller.CalculatedCostForEachPricePlan(SMART_METER_ID).Value;
+            var result = controller.CalculatedCostForEachPricePlan(meterReading.Id).Value;
 
             var actualCosts = ((JObject)result).ToObject<Dictionary<string, decimal>>();
             Assert.Equal(3, actualCosts.Count);
@@ -50,12 +49,12 @@ namespace JOIEnergy.Tests
         [Fact]
         public void ShouldRecommendCheapestPricePlansNoLimitForMeterUsage()
         {
-            meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
+            var meterReading = meterReadingService.StoreReadings(null, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },
                 new ElectricityReading() { Time = DateTime.Now, Reading = 3m }
             });
 
-            object result = controller.RecommendCheapestPricePlans(SMART_METER_ID, null).Value;
+            object result = controller.RecommendCheapestPricePlans(meterReading.Id, null).Value;
             var recommendations = ((IEnumerable<KeyValuePair<string, decimal>>)result).ToList();
 
             Assert.Equal("" + Supplier.PowerForEveryone, recommendations[0].Key);
@@ -70,12 +69,12 @@ namespace JOIEnergy.Tests
         [Fact]
         public void ShouldRecommendLimitedCheapestPricePlansForMeterUsage() 
         {
-            meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
+            var meterReading = meterReadingService.StoreReadings(null, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-45), Reading = 5m },
                 new ElectricityReading() { Time = DateTime.Now, Reading = 20m }
             });
 
-            object result = controller.RecommendCheapestPricePlans(SMART_METER_ID, 2).Value;
+            object result = controller.RecommendCheapestPricePlans(meterReading.Id, 2).Value;
             var recommendations = ((IEnumerable<KeyValuePair<string, decimal>>)result).ToList();
 
             Assert.Equal("" + Supplier.PowerForEveryone, recommendations[0].Key);
@@ -88,12 +87,12 @@ namespace JOIEnergy.Tests
         [Fact]
         public void ShouldRecommendCheapestPricePlansMoreThanLimitAvailableForMeterUsage()
         {
-            meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
+            var meterReading = meterReadingService.StoreReadings(null, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },
                 new ElectricityReading() { Time = DateTime.Now, Reading = 3m }
             });
 
-            object result = controller.RecommendCheapestPricePlans(SMART_METER_ID, 5).Value;
+            object result = controller.RecommendCheapestPricePlans(meterReading.Id, 5).Value;
             var recommendations = ((IEnumerable<KeyValuePair<string, decimal>>)result).ToList();
 
             Assert.Equal(3, recommendations.Count);
