@@ -16,7 +16,11 @@ namespace JOIEnergy.Tests
 
         public MeterReadingServiceTest()
         {
-            _meterReadingService = new MeterReadingService(new InMemoryRepository(new MeterReadingValidator(), false));
+            var dbContext = new DbContext(seed: false);
+            var repository = new InMemoryRepository(dbContext);
+            var meterReadingValidator = new MeterReadingValidator();
+            var transaction = new Transaction(dbContext, meterReadingValidator);
+            _meterReadingService = new MeterReadingService(repository, transaction);
 
             MeterReading meterReading = _meterReadingService.StoreReadings(null, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },

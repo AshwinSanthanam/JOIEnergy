@@ -8,12 +8,6 @@ namespace JOIEnergy.Base.DataManagement
     {
         MeterReading GetMeterReading(string meterId);
 
-        MeterReading InsertMeterReading(TransientMeterReading transientMeterReading);
-
-        MeterReading UpdateMeterReading(string meterReadingId, TransientMeterReading transientMeterReading);
-
         IEnumerable<PricePlan> PricePlans { get; }
-
-        PricePlan InsertPricePlan(TransientPricePlan transientPricePlan);
     }
 }

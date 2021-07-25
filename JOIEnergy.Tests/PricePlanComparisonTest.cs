@@ -20,24 +20,28 @@ namespace JOIEnergy.Tests
         private PricePlanComparatorController controller;
         private Dictionary<string, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
         private readonly IRepository _repository;
+        private readonly AbstractTransaction _transaction;
 
         public PricePlanComparisonTest()
         {
-            _repository = new InMemoryRepository(new MeterReadingValidator(), false);
-            meterReadingService = new MeterReadingService(_repository);
-            _repository.InsertPricePlan(new TransientPricePlan 
+            var dbContext = new DbContext(seed: false);
+            _repository = new InMemoryRepository(dbContext);
+            var meterReadingValidator = new MeterReadingValidator();
+            _transaction = new Transaction(dbContext, meterReadingValidator);
+            meterReadingService = new MeterReadingService(_repository, _transaction);
+            _transaction.InsertPricePlan(new TransientPricePlan 
             {
                 EnergySupplier = Supplier.DrEvilsDarkEnergy,
                 UnitRate = 10,
                 PeakTimeMultiplier = NoMultipliers()
             });
-            _repository.InsertPricePlan(new TransientPricePlan 
+            _transaction.InsertPricePlan(new TransientPricePlan 
             {
                 EnergySupplier = Supplier.TheGreenEco,
                 UnitRate = 2,
                 PeakTimeMultiplier = NoMultipliers()
             });
-            _repository.InsertPricePlan(new TransientPricePlan 
+            _transaction.InsertPricePlan(new TransientPricePlan 
             {
                 EnergySupplier = Supplier.PowerForEveryone,
                 UnitRate = 1,

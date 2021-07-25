@@ -9,10 +9,12 @@ namespace JOIEnergy.Services
     public class MeterReadingService : IMeterReadingService
     {
         private readonly IRepository _repository;
+        private readonly AbstractTransaction _transaction;
 
-        public MeterReadingService(IRepository repository)
+        public MeterReadingService(IRepository repository, AbstractTransaction transaction)
         {
             _repository = repository;
+            _transaction = transaction;
         }
 
         public IEnumerable<ElectricityReading> GetReadings(string smartMeterId) {
@@ -24,14 +26,14 @@ namespace JOIEnergy.Services
             MeterReading meterReading = _repository.GetMeterReading(smartMeterId);
             if (meterReading == null) 
             {
-                return _repository.InsertMeterReading(new TransientMeterReading
+                return _transaction.InsertMeterReading(new TransientMeterReading
                 {
                     ElectricityReadings = electricityReadings
                 });
             }
             else
             {
-                return _repository.UpdateMeterReading(smartMeterId, new TransientMeterReading
+                return _transaction.UpdateMeterReading(smartMeterId, new TransientMeterReading
                 {
                     ElectricityReadings = meterReading.ElectricityReadings.Concat(electricityReadings)
                 });
