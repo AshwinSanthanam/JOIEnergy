@@ -2,9 +2,9 @@
 
 namespace JOIEnergy.Base.Entities
 {
-    public class MeterReadings
+    public class MeterReading
     {
-        public string SmartMeterId { get; set; }
+        public string Id { get; set; }
         public List<ElectricityReading> ElectricityReadings { get; set; }
     }
 }

@@ -4,10 +4,10 @@ namespace JOIEnergy.Base.DataManagement
 {
     public interface IRepository
     {
-        MeterReadings GetMeterReading(string meterId);
+        MeterReading GetMeterReading(string meterId);
 
-        MeterReadings InsertMeterReading(MeterReadings meterReading);
+        MeterReading InsertMeterReading(MeterReading meterReading);
 
-        MeterReadings UpdateMeterReading(MeterReadings meterReading);
+        MeterReading UpdateMeterReading(MeterReading meterReading);
     }
 }

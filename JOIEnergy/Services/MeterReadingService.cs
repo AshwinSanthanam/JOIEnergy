@@ -14,27 +14,27 @@ namespace JOIEnergy.Services
         }
 
         public List<ElectricityReading> GetReadings(string smartMeterId) {
-            MeterReadings meterReading = _repository.GetMeterReading(smartMeterId);
+            MeterReading meterReading = _repository.GetMeterReading(smartMeterId);
             return meterReading?.ElectricityReadings ?? new List<ElectricityReading>();
         }
 
         public void StoreReadings(string smartMeterId, List<ElectricityReading> electricityReadings) {
-            MeterReadings meterReading = _repository.GetMeterReading(smartMeterId);
+            MeterReading meterReading = _repository.GetMeterReading(smartMeterId);
             if (meterReading == null) 
             {
-                _repository.InsertMeterReading(new MeterReadings
+                _repository.InsertMeterReading(new MeterReading
                 {
                     ElectricityReadings = electricityReadings,
-                    SmartMeterId = smartMeterId
+                    Id = smartMeterId
                 });
             }
             else
             {
                 meterReading.ElectricityReadings.AddRange(electricityReadings);
-                _repository.UpdateMeterReading(new MeterReadings
+                _repository.UpdateMeterReading(new MeterReading
                 {
                     ElectricityReadings = meterReading.ElectricityReadings,
-                    SmartMeterId = smartMeterId
+                    Id = smartMeterId
                 });
             }
         }
