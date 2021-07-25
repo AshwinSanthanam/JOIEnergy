@@ -25,8 +25,8 @@ namespace JOIEnergy.Controllers
             if (!IsMeterReadingsValid(meterReadings)) {
                 return new BadRequestObjectResult("Internal Server Error");
             }
-            _meterReadingService.StoreReadings(meterReadings.Id,meterReadings.ElectricityReadings);
-            return new OkObjectResult("{}");
+            var insertedMeterReading = _meterReadingService.StoreReadings(meterReadings.Id,meterReadings.ElectricityReadings);
+            return new OkObjectResult(insertedMeterReading);
         }
 
         private bool IsMeterReadingsValid(MeterReading meterReadings)
