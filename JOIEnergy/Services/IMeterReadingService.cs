@@ -6,6 +6,6 @@ namespace JOIEnergy.Services
     public interface IMeterReadingService
     {
         IEnumerable<ElectricityReading> GetReadings(string smartMeterId);
-        void StoreReadings(string smartMeterId, IEnumerable<ElectricityReading> electricityReadings);
+        MeterReading StoreReadings(string smartMeterId, IEnumerable<ElectricityReading> electricityReadings);
     }
 }

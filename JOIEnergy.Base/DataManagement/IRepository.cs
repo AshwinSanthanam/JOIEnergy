@@ -1,4 +1,5 @@
 ﻿using JOIEnergy.Base.Entities;
+using JOIEnergy.Base.TransientEntities.cs;
 
 namespace JOIEnergy.Base.DataManagement
 {
@@ -6,8 +7,8 @@ namespace JOIEnergy.Base.DataManagement
     {
         MeterReading GetMeterReading(string meterId);
 
-        MeterReading InsertMeterReading(MeterReading meterReading);
+        MeterReading InsertMeterReading(TransientMeterReading transientMeterReading);
 
-        MeterReading UpdateMeterReading(MeterReading meterReading);
+        MeterReading UpdateMeterReading(string meterReadingId, TransientMeterReading transientMeterReading);
     }
 }

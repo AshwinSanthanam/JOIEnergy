@@ -2,6 +2,7 @@
 using System.Linq;
 using JOIEnergy.Base.DataManagement;
 using JOIEnergy.Base.Entities;
+using JOIEnergy.Base.TransientEntities.cs;
 
 namespace JOIEnergy.Services
 {
@@ -19,22 +20,20 @@ namespace JOIEnergy.Services
             return meterReading?.ElectricityReadings ?? Enumerable.Empty<ElectricityReading>();
         }
 
-        public void StoreReadings(string smartMeterId, IEnumerable<ElectricityReading> electricityReadings) {
+        public MeterReading StoreReadings(string smartMeterId, IEnumerable<ElectricityReading> electricityReadings) {
             MeterReading meterReading = _repository.GetMeterReading(smartMeterId);
             if (meterReading == null) 
             {
-                _repository.InsertMeterReading(new MeterReading
+                return _repository.InsertMeterReading(new TransientMeterReading
                 {
-                    ElectricityReadings = electricityReadings,
-                    Id = smartMeterId
+                    ElectricityReadings = electricityReadings
                 });
             }
             else
             {
-                _repository.UpdateMeterReading(new MeterReading
+                return _repository.UpdateMeterReading(smartMeterId, new TransientMeterReading
                 {
-                    ElectricityReadings = meterReading.ElectricityReadings.Concat(electricityReadings),
-                    Id = smartMeterId
+                    ElectricityReadings = meterReading.ElectricityReadings.Concat(electricityReadings)
                 });
             }
         }
