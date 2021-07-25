@@ -7,6 +7,7 @@ namespace JOIEnergy.Base.Entities
 {
     public class PricePlan
     {
+        public string Id { get; set; }
         public Supplier EnergySupplier { get; set; }
         public decimal UnitRate { get; set; }
         public IList<PeakTimeMultiplier> PeakTimeMultiplier { get; set;}
