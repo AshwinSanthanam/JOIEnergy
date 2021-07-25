@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using JOIEnergy.Base.Entities;
+﻿using JOIEnergy.Base.Entities;
 using JOIEnergy.Base.Validators;
 using JOIEnergy.Services;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace JOIEnergy.Controllers
 {
@@ -19,9 +14,9 @@ namespace JOIEnergy.Controllers
         {
             _meterReadingService = meterReadingService;
         }
-        // POST api/values
-        [HttpPost ("store")]
-        public ObjectResult Post([FromBody]MeterReading meterReadings)
+
+        [HttpPost]
+        public ObjectResult CreateMeterReading([FromBody]MeterReading meterReadings)
         {
             try
             {
@@ -34,9 +29,10 @@ namespace JOIEnergy.Controllers
             }
         }
 
-        [HttpGet("read/{smartMeterId}")]
-        public ObjectResult GetReading(string smartMeterId) {
-            return new OkObjectResult(_meterReadingService.GetReadings(smartMeterId));
+        [HttpGet]
+        [Route("{meterReadingId}")]
+        public ObjectResult GetMeterReading(string meterReadingId) {
+            return new OkObjectResult(_meterReadingService.GetReadings(meterReadingId));
         }
     }
 }
