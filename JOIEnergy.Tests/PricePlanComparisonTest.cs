@@ -1,14 +1,12 @@
 ﻿using JOIEnergy.Controllers;
-using JOIEnergy.Domain;
-using JOIEnergy.Enums;
 using JOIEnergy.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
-using Xunit.Abstractions;
 using Newtonsoft.Json.Linq;
+using JOIEnergy.Base.Enums;
+using JOIEnergy.Base.Entities;
 
 namespace JOIEnergy.Tests
 {
@@ -21,7 +19,7 @@ namespace JOIEnergy.Tests
 
         public PricePlanComparisonTest()
         {
-            var readings = new Dictionary<string, List<Domain.ElectricityReading>>();
+            var readings = new Dictionary<string, List<ElectricityReading>>();
             meterReadingService = new MeterReadingService(readings);
             var pricePlans = new List<PricePlan>() { 
                 new PricePlan() { EnergySupplier = Supplier.DrEvilsDarkEnergy, UnitRate = 10, PeakTimeMultiplier = NoMultipliers() }, 

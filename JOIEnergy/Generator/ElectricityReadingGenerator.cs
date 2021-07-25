@@ -1,6 +1,6 @@
-﻿using System;
+﻿using JOIEnergy.Base.Entities;
+using System;
 using System.Collections.Generic;
-using JOIEnergy.Domain;
 
 namespace JOIEnergy.Generator
 {

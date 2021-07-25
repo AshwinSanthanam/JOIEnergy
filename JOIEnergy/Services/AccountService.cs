@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using JOIEnergy.Enums;
+﻿using System.Collections.Generic;
+using JOIEnergy.Base.Enums;
 
 namespace JOIEnergy.Services
 {

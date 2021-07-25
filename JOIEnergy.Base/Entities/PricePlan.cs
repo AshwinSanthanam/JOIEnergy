@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JOIEnergy.Enums;
+using JOIEnergy.Base.Enums;
 
-namespace JOIEnergy.Domain
+namespace JOIEnergy.Base.Entities
 {
     public class PricePlan
     {
@@ -20,11 +20,5 @@ namespace JOIEnergy.Domain
                 return UnitRate;
             }
         }
-    }
-
-    public class PeakTimeMultiplier
-    {
-        public DayOfWeek DayOfWeek { get; set; }
-        public decimal Multiplier { get; set; }
     }
 }

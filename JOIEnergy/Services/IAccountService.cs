@@ -1,4 +1,4 @@
-﻿using JOIEnergy.Enums;
+﻿using JOIEnergy.Base.Enums;
 
 namespace JOIEnergy.Services
 {

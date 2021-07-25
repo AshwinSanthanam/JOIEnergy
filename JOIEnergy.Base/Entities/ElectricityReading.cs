@@ -1,5 +1,5 @@
 ﻿using System;
-namespace JOIEnergy.Domain
+namespace JOIEnergy.Base.Entities
 {
     public class ElectricityReading
     {
