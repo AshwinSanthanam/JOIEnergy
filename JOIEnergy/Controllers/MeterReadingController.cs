@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JOIEnergy.Base.Entities;
+using JOIEnergy.Base.Validators;
 using JOIEnergy.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,19 +23,15 @@ namespace JOIEnergy.Controllers
         [HttpPost ("store")]
         public ObjectResult Post([FromBody]MeterReading meterReadings)
         {
-            if (!IsMeterReadingsValid(meterReadings)) {
-                return new BadRequestObjectResult("Internal Server Error");
+            try
+            {
+                var insertedMeterReading = _meterReadingService.StoreReadings(meterReadings.Id, meterReadings.ElectricityReadings);
+                return new OkObjectResult(insertedMeterReading);
             }
-            var insertedMeterReading = _meterReadingService.StoreReadings(meterReadings.Id,meterReadings.ElectricityReadings);
-            return new OkObjectResult(insertedMeterReading);
-        }
-
-        private bool IsMeterReadingsValid(MeterReading meterReadings)
-        {
-            String smartMeterId = meterReadings.Id;
-            IEnumerable<ElectricityReading> electricityReadings = meterReadings.ElectricityReadings;
-            return smartMeterId != null && smartMeterId.Any()
-                    && electricityReadings != null && electricityReadings.Any();
+            catch (DataIntegrityException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("read/{smartMeterId}")]
