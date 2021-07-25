@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using JOIEnergy.Base.Entities;
-using JOIEnergy.Base.Enums;
-using JOIEnergy.Generator;
+﻿using System.Collections.Generic;
 using JOIEnergy.Registry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,9 +19,6 @@ namespace JOIEnergy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var readings =
-                GenerateMeterElectricityReadings();
-
             services.AddMvc();
 
             new List<IRegistry> 
@@ -34,9 +26,6 @@ namespace JOIEnergy
                 new ServiceRegistry(),
                 new DatabaseRegistry()
             }.ForEach(x => x.Register(services, Configuration));
-
-            services.AddSingleton((IServiceProvider arg) => readings);
-            services.AddSingleton((IServiceProvider arg) => SmartMeterToPricePlanAccounts);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,32 +37,6 @@ namespace JOIEnergy
             }
 
             app.UseMvc();
-        }
-
-        private Dictionary<string, List<ElectricityReading>> GenerateMeterElectricityReadings() {
-            var readings = new Dictionary<string, List<ElectricityReading>>();
-            var generator = new ElectricityReadingGenerator();
-            var smartMeterIds = SmartMeterToPricePlanAccounts.Select(mtpp => mtpp.Key);
-
-            foreach (var smartMeterId in smartMeterIds)
-            {
-                readings.Add(smartMeterId, generator.Generate(20));
-            }
-            return readings;
-        }
-
-        public Dictionary<String, Supplier> SmartMeterToPricePlanAccounts
-        {
-            get
-            {
-                Dictionary<String, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
-                smartMeterToPricePlanAccounts.Add("smart-meter-0", Supplier.DrEvilsDarkEnergy);
-                smartMeterToPricePlanAccounts.Add("smart-meter-1", Supplier.TheGreenEco);
-                smartMeterToPricePlanAccounts.Add("smart-meter-2", Supplier.DrEvilsDarkEnergy);
-                smartMeterToPricePlanAccounts.Add("smart-meter-3", Supplier.PowerForEveryone);
-                smartMeterToPricePlanAccounts.Add("smart-meter-4", Supplier.TheGreenEco);
-                return smartMeterToPricePlanAccounts;
-            }
         }
     }
 }

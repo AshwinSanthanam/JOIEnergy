@@ -21,7 +21,7 @@ namespace JOIEnergy.DataAccess.DataManagement
             {
                 return null;
             }
-            _dbContext.MeterAssociatedReadings.TryGetValue(meterId, out MeterReading meterReading);
+            _dbContext.MeterReadings.TryGetValue(meterId, out MeterReading meterReading);
             return meterReading;
         }
     }

@@ -22,7 +22,7 @@ namespace JOIEnergy.DataAccess.DataManagement
                 ElectricityReadings = transientMeterReading.ElectricityReadings,
                 Id = Guid.NewGuid().ToString()
             };
-            _dbContext.MeterAssociatedReadings.Add(meterReading.Id, meterReading);
+            _dbContext.MeterReadings.Add(meterReading.Id, meterReading);
             return meterReading;
         }
 
@@ -41,7 +41,7 @@ namespace JOIEnergy.DataAccess.DataManagement
 
         protected override MeterReading RawUpdateMeterReading(string meterReadingId, TransientMeterReading transientMeterReading)
         {
-            MeterReading meterReadingToUpdate = _dbContext.MeterAssociatedReadings[meterReadingId];
+            MeterReading meterReadingToUpdate = _dbContext.MeterReadings[meterReadingId];
             meterReadingToUpdate.ElectricityReadings = transientMeterReading.ElectricityReadings;
             return meterReadingToUpdate;
         }
